@@ -3,7 +3,9 @@
     <div class="container-main">NAVIGATION</div>
   </nav>
   <section>
-    <div class="container-main">PRESENTATION</div>
+    <div class="container-main">
+      <ImageView />
+    </div>
   </section>
   <footer>
     <div class="container-main">FOOTER</div>
@@ -11,10 +13,12 @@
 </template>
 
 <script>
+import ImageView from './views/ImageView'
 
 export default {
   name: 'App',
   components: {
+    ImageView
   }
 }
 </script>
@@ -39,6 +43,10 @@ export default {
     padding: 10px;
     background-color: #3b444d;
     color: #aeb6be;
+
+    h2 {
+      font-size: 18px;
+    }
   }
 }
 </style>
