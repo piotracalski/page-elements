@@ -43,6 +43,7 @@ export default {
     padding: 10px;
     background-color: #3b444d;
     color: #aeb6be;
+    overflow: hidden;
 
     h2 {
       font-size: 18px;
