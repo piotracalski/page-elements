@@ -10,19 +10,17 @@
       />
     </picture> -->
     <!-- <div><p v-for="rendition in renditions" :key="rendition.width">{{ `rendition - width: ${rendition.width}, height: ${rendition.height}` }}</p></div> -->
-    <picture v-if="width">
+    <picture>
       <img ref="image"
         :alt="alt"
         :title="title"
-        :width="width"
-        :height="height"
       />
     </picture>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 export default {
   name: "Image",
@@ -50,12 +48,15 @@ export default {
     renditions: {
       type: Array,
       required: false
+    },
+    breakpoints: {
+      type: Array,
+      required: false
     }
   },
   setup(props) {
     const root = ref(null)
     const image = ref(null)
-    const rootWidth = computed(() => root.value.offsetWidth)
     function renditionIntervals (renditions) {
       return renditions.map(rendition => rendition.width)
         .slice()
@@ -72,7 +73,7 @@ export default {
       return renditions.filter(rendition => rendition.width === renditionWidth)[0].height
     }
 
-    function getRenditionName(width, height) {
+    function getRenditionSrc(width, height) {
       let originalImage = props.src.split('.')
       return `${originalImage[0]}-rendition-${width}-${height}.${originalImage[1]}`
     }
@@ -82,22 +83,30 @@ export default {
         console.log(`width is set to: ${props.width}`)
         const renditionWidth = getRenditionWidth(renditionIntervals(props.renditions))
         const renditionHeight = getRenditionHeight(props.renditions, renditionWidth)
-        image.value.src = getRenditionName(renditionWidth, renditionHeight)
+        image.value.width = props.width
+        image.value.height = props.height
+        image.value.src = getRenditionSrc(renditionWidth, renditionHeight)
       } else {
         console.log('width is not set')
+        const rootWidth = root.value.offsetWidth
+        image.value.width = rootWidth
+        image.value.src = props.src
       }
     })
 
     return {
       root,
-      image,
-      rootWidth
+      image
     }
   }
 }
 
 // DONE jeśli podana jest width to renditiony na podstawie tego propertiesu 
 // jeśli nie są podane to renditiony na podstawie computed width parent node + ustawienie width img = width parent node
+  // DONE get width of parent node
+  // DONE set width of image to parent nodes width
+  // DONE height should compensate
+  // provide renditions - VERY EASY :) 
 </script>
 
 <style lang="scss" scoped>

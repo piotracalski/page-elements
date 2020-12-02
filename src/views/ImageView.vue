@@ -1,38 +1,35 @@
 <template>
   <div class="container-chunk">
-    <h2>Image - 480x300px - renditions set</h2>
-    <Image
-      :src="'/assets/example-image.jpg'"
-      :alt="'A very nice image'"
-      :title="'example image'"
-      :width="'480'"
-      :height="'300'"
-      :renditions="state.renditions"
-    />
-    <h2>Image - 1000x625px - renditions set</h2>
-    <Image
-      :src="'/assets/example-image.jpg'"
-      :alt="'A very nice image'"
-      :title="'example image'"
-      :width="'1000'"
-      :height="'625'"
-      :renditions="state.renditions"
-    />
-    <h2>Image - 1600x1000px - renditions set</h2>
-    <Image
-      :src="'/assets/example-image.jpg'"
-      :alt="'A very nice image'"
-      :title="'example image'"
-      :width="'1600'"
-      :height="'1000'"
-      :renditions="state.renditions"
-    />
+    <div class="container-example" v-for="[width, height] in [[480, 300], [1000, 625], [1600, 1000]]" :key="width">
+      <h2>{{ `Image - ${width}x${height}px` }}</h2>
+      <Image
+        :src="'/assets/example-image.jpg'"
+        :alt="'A very nice image'"
+        :title="'example image'"
+        :width="width"
+        :height="height"
+        :renditions="state.renditions"
+      />
+    </div>
+    <div class="container-example" v-for="width in [480, 1000, 1600]" :key="width">
+      <h2>{{ `Image - no dimensions specified - small (${width}px)` }}</h2>
+      <div :style="{width: `${width}px`}">
+        <Image
+          :src="'/assets/example-image.jpg'"
+          :alt="'A very nice image'"
+          :title="'example image'"
+          :renditions="state.renditions"
+          :breakpoints="state.breakpoints"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import Image from '../components/Image'
+import { imageRenditions, layoutBreakpoints } from '../assets/base'
 
 export default {
   name: 'ImageView',
@@ -40,13 +37,12 @@ export default {
     Image
   },
   setup() {
+    onMounted(() => {
+    })
+
     const state = reactive({
-      standardImageWidth: '',
-      renditions: [
-        {width: 1920, height: 1200},
-        {width: 1200, height: 750},
-        {width: 768, height: 480}
-      ]
+      renditions: imageRenditions,
+      breakpoints: layoutBreakpoints
     })
 
     return {
